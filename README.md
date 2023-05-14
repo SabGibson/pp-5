@@ -59,6 +59,8 @@ To save time in this process, the IT team suggested an ML system that detects in
 * Matplotlib - was used as the main plotting software to display visualizations
 * Keras - keras comes with tensorflow 2, but was used to abstract some of the more complex elements and implement tf functionality successfully
 * OS - base lib in python but was used to collect data and organize file store to be compaitbale with other parts of mlpipline
+* VS code - used vs code ipynb jupyter lab instance to develop ml files
+* pipenv - used to manage virtual environment for dependancies 
 ## Credits 
 
 * In this section, you need to reference where you got your content, media and from where you got extra help. It is common practice to use code from other repositories and tutorials. However, it is necessary to be very specific about these sources to avoid plagiarism. 
