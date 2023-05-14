@@ -5,18 +5,28 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt 
 import matplotlib.image as mpimg
-from tensorflow.keras.preprocessing.image import img_to_array,load_img
+from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-import random
 import base64
 from shutil import copyfile
-import shutil
+from contextlib import redirect_stdout
+import io
 import os
+import pickle
 
 
-# load your model
+# load your model & global vars
 model = tf.keras.models.load_model('models\cherry-picker-v1.h5')
+with open('models/history.pickle', 'rb') as file_pi:
+    loaded_history = pickle.load(file_pi)
 
+
+    acc=loaded_history['accuracy']
+    val_acc=loaded_history['val_accuracy']
+    loss=loaded_history['loss']
+    val_loss=loaded_history['val_loss']
+
+    epochs=range(len(acc))
 
 def project_summary():
     st.title("Project Summary and Business Case")
@@ -207,12 +217,59 @@ def model_explained():
         f"\n- Can view model architecture\n"
         f"\n- Can review model performance\n"
         f"\n- Can understand model training and testing methodology\n" )
+    
 
+    st.write()
+
+    st.write(f"The model uses a Deep CNN architecture with three Conv2d layer to extract features.\n"
+             f"The model was trained with a callback to prevent overfitting but has 99% accuracy on both training and valdiation sets.\n"
+             f"The model The model used binary cross entropy as the loss function and uses adam with a learnign rate of 0.001 as the optimizer.\n"
+             )
+    
+    st.write(f"During data collection the the data was structured into training and test sets and organized in the approprate directories.\n"
+             f"So ImageDataGenerator could be used form the keras module.\n"
+            f"Using ImageDataGenerator we were able to stream data and make modifactions allowing the use of data augmentation in the model buliding\n"
+            f"The use of data augmentation allowed the creation of more data samples with which to train the model, and may have contributed to delivering the business objective.\n"
+            )
+
+    st.info(f"Results of the training and validation can be viewed below. the results show:\n"
+            f"\n - Validation accuracy of 99%\n"
+            f"\n - Training accuracy of 99%\n"
+            f"\n - Sync of training and test losses\n"
+            f"\n - Model trained appropiately to meet business requirements\n")
+
+
+    if st.checkbox('Show evaluation: accuracy & loss'):
+
+        fig, axs = plt.subplots(2, figsize=(10, 10))
+
+        # Plot Training and Validation Accuracy
+        axs[0].plot(epochs, acc, 'r', label="Training Accuracy")
+        axs[0].plot(epochs, val_acc, 'b', label="Validation Accuracy")
+        axs[0].set_title('Training and Validation Accuracy')
+        axs[0].legend()
+
+
+        # Plot Training and Validation Loss
+        axs[1].plot(epochs, loss, 'r', label="Training Loss")
+        axs[1].plot(epochs, val_loss, 'b', label="Validation Loss")
+        axs[1].set_title('Training and Validation Loss')
+        axs[1].legend()
+
+        plt.tight_layout()
+        st.pyplot(fig)
+
+    st.success(f"Model Architecture can be shown below:\n")
     if st.checkbox('Show model architecture'):
-        st.write(model.summary())
+        str_buffer = io.StringIO()
 
-    if st.checkbox('Show evaluation'):
-        st.write(model.summary())
+        with redirect_stdout(str_buffer):
+            model.summary()
+
+        model_summary_str = str_buffer.getvalue()
+        st.text(model_summary_str)
+
+
 
 pages = {
     "Project Summry": project_summary,
