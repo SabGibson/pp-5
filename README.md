@@ -53,9 +53,12 @@ To save time in this process, the IT team suggested an ML system that detects in
 
 
 ## Main Data Analysis and Machine Learning Libraries
-* Here you should list the libraries used in the project and provide an example(s) of how you used these libraries.
-
-
+* Numpy - used for matrix calculations
+* Pandas - used to manipulate dataframes and return csv 
+* Tensorflow - used to develop ml model and preprocess and augment images for training 
+* Matplotlib - was used as the main plotting software to display visualizations
+* Keras - keras comes with tensorflow 2, but was used to abstract some of the more complex elements and implement tf functionality successfully
+* OS - base lib in python but was used to collect data and organize file store to be compaitbale with other parts of mlpipline
 ## Credits 
 
 * In this section, you need to reference where you got your content, media and from where you got extra help. It is common practice to use code from other repositories and tutorials. However, it is necessary to be very specific about these sources to avoid plagiarism. 
