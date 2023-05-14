@@ -186,7 +186,6 @@ def ai_predict():
             new_row = pd.DataFrame({'File': [str(uploaded_file.name)], 'Predicted Class': [predicted_class]})
             results = pd.concat([results, new_row], ignore_index=True)
 
-
             # Display the prediction
             st.info(f'Predicted class: {predicted_class}')
 
@@ -219,6 +218,7 @@ pages = {
     "Project Summry": project_summary,
     "Customer Data Analysis": data_analysis,
     "Customer Leaf Tool": ai_predict,
+    "Technical Breakdown":model_explained,
 }
 
 
