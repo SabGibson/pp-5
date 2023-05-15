@@ -1,17 +1,23 @@
-# Use an official Python runtime as a parent image
-FROM python:3.10.11-slim
+# Start from the official Python image
+FROM python:3.10-slim-buster
 
-# Set the working directory in the container to /app
+# Create a working directory
 WORKDIR /app
 
-# Add the current directory contents into the container at /app
-ADD . /app
+# Copy the requirements file in order to install 
+# Python dependencies
+COPY requirements.txt ./requirements.txt
 
+# Install the dependencies
+RUN pip install -r requirements.txt
 
-RUN pip install --no-cache-dir pipenv && pipenv install --system --deploy
+# Copy the rest of the code
+COPY . .
 
+# Expose port for the Streamlit application
+ENV PORT 8501
+EXPOSE $PORT
 
-EXPOSE 8501
+# Run the application
+CMD streamlit run --server.address 0.0.0.0 --server.port $PORT app.py
 
-
-CMD streamlit run app.py

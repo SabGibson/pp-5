@@ -15,8 +15,17 @@ import os
 import pickle
 
 
-# load your model & global vars
-model = tf.keras.models.load_model('models\cherry-picker-v1.h5')
+# load your model
+
+# Load TFLite model
+tflite_model_path = 'models/model.tflite'
+interpreter = tf.lite.Interpreter(model_path=tflite_model_path)
+interpreter.allocate_tensors()
+
+# Get input and output tensors
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
+
 with open('models/history.pickle', 'rb') as file_pi:
     loaded_history = pickle.load(file_pi)
 
@@ -191,8 +200,17 @@ def ai_predict():
             img_array = img_array / 255.0
 
             # Use the model for prediction
-            predictions = model.predict(img_array)
-            predicted_class = "unhealthy" if  predictions > 0.6 else "healthy"
+            # Set input tensor
+            interpreter.set_tensor(input_details[0]['index'], img_array)
+
+            # Run the model
+            interpreter.invoke()
+
+            # Get the output tensor
+            predictions = interpreter.get_tensor(output_details[0]['index'])
+
+            # Compute the predicted class
+            predicted_class = "unhealthy" if predictions[0][0] > 0.6 else "healthy"
             new_row = pd.DataFrame({'File': [str(uploaded_file.name)], 'Predicted Class': [predicted_class]})
             results = pd.concat([results, new_row], ignore_index=True)
 
@@ -262,9 +280,21 @@ def model_explained():
     st.success(f"Model Architecture can be shown below:\n")
     if st.checkbox('Show model architecture'):
         str_buffer = io.StringIO()
-
+        input_details = interpreter.get_input_details()
+        output_details = interpreter.get_output_details()
         with redirect_stdout(str_buffer):
-            model.summary()
+
+
+            # Print input and output details
+            print("==Input Details==")
+            print("Name:", input_details[0]['name'])
+            print("Shape:", input_details[0]['shape'])
+            print("Type:", input_details[0]['dtype'])
+
+            print("\n==Output Details==")
+            print("Name:", output_details[0]['name'])
+            print("Shape:", output_details[0]['shape'])
+            print("Type:", output_details[0]['dtype'])
 
         model_summary_str = str_buffer.getvalue()
         st.text(model_summary_str)

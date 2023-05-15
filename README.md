@@ -38,18 +38,17 @@ To save time in this process, the IT team suggested an ML system that detects in
 * Due to methodology used the some of the pages take a while to load. This is not a bug but a performance fix that could be resolved in future dates.
 
 ## Deployment
-### Heroku
+### Google Cloud Run
 
-* The App live link is: https://YOUR_APP_NAME.herokuapp.com/ 
-* Set the runtime.txt Python version to a [Heroku-20](https://devcenter.heroku.com/articles/python-support#supported-runtimes) stack currently supported version.
-* The project was deployed to Heroku using the following steps.
+* The App live link is: [Launch App](https://cherry-ai-lite-hi34eli5da-ew.a.run.app) 
 
-1. Log in to Heroku and create an App
-2. At the Deploy tab, select GitHub as the deployment method.
-3. Select your repository name and click Search. Once it is found, click Connect.
-4. Select the branch you want to deploy, then click Deploy Branch.
-5. The deployment process should happen smoothly if all deployment files are fully functional. Click now the button Open App on the top of the page to access your App.
-6. If the slug size is too large then add large files not required for the app to the .slugignore file. 
+1. Log in to gcp and create a project
+2. Using CLI build docker image 
+3. Pushing built image to gcp cloud run
+4. Naming service and deploying
+
+* The model deployed is a ".tflite" optimized for mobile use to meet customer needs
+* Heroku could not be used to deploy as model was still to large and some dependancies on some of the files were required.
 
 
 ## Main Data Analysis and Machine Learning Libraries

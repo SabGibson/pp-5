@@ -5,11 +5,9 @@ name = "pypi"
 
 [packages]
 tensorflow = "*"
+pillow = "*"
 streamlit = "*"
-seaborn = "*"
 matplotlib = "*"
-opencv-python = "*"
-plotly = "*"
 
 [dev-packages]
 ipykernel = "*"
